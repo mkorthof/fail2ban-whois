@@ -1,5 +1,5 @@
 # fail2ban-whois
-### Whois all banned ip's in fail2ban jails
+### Whois all banned IP's in fail2ban Jails
 
 Does a <code>fail2ban-client status</code> to get Banned IP List and runs whois and outputs "abuse contact", "country", "inetnum" etc.
 
