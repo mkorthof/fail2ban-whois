@@ -1,7 +1,7 @@
 # fail2ban-whois
 ### Whois all banned IP's in fail2ban Jails
 
-Does a <code>fail2ban-client status</code> to get Banned IP List and runs whois and outputs "abuse contact", "country", "inetnum" etc.
+Does a <code>fail2ban-client status</code> to get Banned IP List, runs <code>whois</code> and outputs "abuse contact", "country", "inetnum" etc.
 
 <pre>
 ./fail2ban-whois.sh [-h] help
