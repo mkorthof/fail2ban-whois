@@ -5,6 +5,7 @@
 
 if [ $( id -u ) -ne 0 ]; then echo "$0 needs root to run"; exit 1; fi
 
+LOG=fail2ban-whois.log
 BOLD=$( tput bold )
 SGR0=$( tput sgr0 )
 SMUL=$( tput smul )
@@ -14,7 +15,8 @@ LIST=0
 if [ $( echo $* | grep '\-h' ) ]; then echo -e "\n$0 [-h] help\n$0 [-s] output short listing (default)\n$0 [-l] output long listing\n"; exit 0; fi
 if [ $( echo $* | grep '\-s' ) ]; then LIST=0; fi
 if [ $( echo $* | grep '\-l' ) ]; then LIST=1; fi
-for j in $( fail2ban-client status | grep "Jail list:" | sed -e 's/.*:\t*\(.*\)/\1/g' -e 's/,//g' ); do 
+echo "$( date +%F\ %T ) running ${BOLD}$0${SGR0} and logging to ${SMUL}$LOG${RMUL}..." | tee -a $LOG
+for j in $( fail2ban-client status | grep --color=never "Jail list:" | sed -e 's/.*:\t*\(.*\)/\1/g' -e 's/,//g' ); do 
   for ip in $( fail2ban-client status $j | grep "IP list:" ); do
     if [ "$( echo $ip | grep -E [0-9a-fA-F\.:]{4} )" ]; then
       echo -e "[JAIL] $j [IP] ${BOLD}$ip${SGR0} [WHOIS]\n$( whois $ip | \
@@ -29,4 +31,4 @@ for j in $( fail2ban-client status | grep "Jail list:" | sed -e 's/.*:\t*\(.*\)/
       )" | ( [ $LIST -eq 0 ] && sed ':a;N;$!ba;s/\(\n\|\r\n\)/ /g' || cat )
     fi
   done
-done
+done | tee -a $LOG
